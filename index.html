@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Letter Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        select{
+            width: 5%;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Letter Converter</h2>
+    <p>Enter the input text below and click "Convert":</p>
+    <textarea id="inputText" placeholder="Enter your text here..."></textarea>
+    <button onclick="convertText()">Convert</button>
+    
+    <h3>Converted Output:</h3>
+    <pre id="outputText"></pre>
+
+    <label for="letterSelect">Select a Letter:</label>
+    <select class="select" id="letterSelect" onchange="updateMapping()">
+        <option value="S">S</option>
+        <option value="R">R</option>
+        <option value="G">G</option>
+        <option value="M">M</option>
+        <option value="P">P</option>
+        <option value="D">D</option>
+        <option value="N">N</option>
+    </select>
+
+    <h3>Mapped Output:</h3>
+    <pre id="mappingOutput">Select a letter to see the mapping.</pre>
+
+    <script>
+        // Letter mapping cycle
+        const mapping = {
+            'S': 'R',
+            'R': 'G',
+            'G': 'M',
+            'M': 'P',
+            'P': 'D',
+            'D': 'N',
+            'N': 'S',
+            's': 'r', // Handling lowercase if needed
+            'r': 'g',
+            'g': 'm',
+            'm': 'p',
+            'p': 'd',
+            'd': 'n',
+            'n': 's'
+        };
+
+        function convertText() {
+            let input = document.getElementById("inputText").value;
+            let output = "";
+
+            for (let char of input) {
+                // Convert only if character exists in mapping
+                output += mapping[char] || char;
+            }
+
+            document.getElementById("outputText").textContent = output;
+        }
+
+        function updateMapping() {
+            let selectedLetter = document.getElementById("letterSelect").value;
+
+            // Start with the selected letter and generate the sequence using the mapping
+            let sequence = [];
+            let currentLetter = selectedLetter;
+
+            // Loop to get the sequence and stop when we return to the selected letter
+            do {
+                sequence.push(currentLetter);
+                currentLetter = mapping[currentLetter];
+            } while (currentLetter !== selectedLetter); // Ensure we stop when we return to the selected letter
+
+            // Repeat the first letter at the end of the sequence
+            sequence.push(selectedLetter);
+
+            // Display the sequence with the first letter repeated at the end
+            document.getElementById("mappingOutput").textContent = sequence.join("");
+        }
+
+    </script>
+
+</body>
+</html>
